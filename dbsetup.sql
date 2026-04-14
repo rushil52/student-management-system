@@ -1,4 +1,6 @@
-use student_mgmt;
+CREATE DATABASE IF NOT EXISTS student_mgmt;
+
+USE student_mgmt;
 
 CREATE TABLE IF NOT EXISTS `departments` (
   `department_id` int PRIMARY KEY AUTO_INCREMENT,
