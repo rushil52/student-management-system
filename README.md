@@ -1,9 +1,3 @@
-# Student Management System API
-
-A Flask REST API for managing students, courses, grades, attendance, and more.
-
----
-
 ## Setup
 
 ### 1. Install dependencies
@@ -17,7 +11,7 @@ pip install -r requirements.txt
 set MYSQL_HOST=localhost
 set MYSQL_USER=root
 set MYSQL_PASSWORD=yourpassword
-set MYSQL_DB=student_management
+set MYSQL_DB=student_mgmt
 set JWT_SECRET_KEY=keykeykekyekykeykekyekykeyk
 ```
 
@@ -26,6 +20,7 @@ set JWT_SECRET_KEY=keykeykekyekykeykekyekykeyk
 ### 4. Start the server
 ```bash
 python app.py
+frontend> npm run dev
 ```
 
 ---
