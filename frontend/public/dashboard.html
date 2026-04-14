@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Student Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-900">Student Management System</h1>
+            <div class="flex items-center gap-4">
+                <span id="usernameDisplay" class="text-sm text-gray-600"></span>
+                <button 
+                    id="logoutBtn" 
+                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition text-sm font-medium"
+                >
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Tabs Navigation -->
+        <div class="flex gap-2 mb-6 border-b border-gray-200 flex-wrap">
+            <button class="tab-btn active px-4 py-2 font-medium text-blue-600 border-b-2 border-blue-600" data-tab="students">
+                Students
+            </button>
+            <button class="tab-btn px-4 py-2 font-medium text-gray-600 border-b-2 border-transparent hover:text-gray-900" data-tab="courses">
+                Courses
+            </button>
+            <button class="tab-btn px-4 py-2 font-medium text-gray-600 border-b-2 border-transparent hover:text-gray-900" data-tab="departments">
+                Departments
+            </button>
+            <button class="tab-btn px-4 py-2 font-medium text-gray-600 border-b-2 border-transparent hover:text-gray-900" data-tab="instructors">
+                Instructors
+            </button>
+            <button class="tab-btn px-4 py-2 font-medium text-gray-600 border-b-2 border-transparent hover:text-gray-900" data-tab="enrollment">
+                Enrollment
+            </button>
+            <button class="tab-btn px-4 py-2 font-medium text-gray-600 border-b-2 border-transparent hover:text-gray-900" data-tab="grades">
+                Grades
+            </button>
+            <button class="tab-btn px-4 py-2 font-medium text-gray-600 border-b-2 border-transparent hover:text-gray-900" data-tab="attendance">
+                Attendance
+            </button>
+            <button class="tab-btn px-4 py-2 font-medium text-gray-600 border-b-2 border-transparent hover:text-gray-900" data-tab="reports">
+                Reports
+            </button>
+        </div>
+
+        <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+            <div class="bg-white p-6 rounded-lg w-96">
+                <h2 id="modalTitle" class="text-lg font-semibold mb-4"></h2>
+
+                <form id="dynamicForm" class="space-y-2"></form>
+
+                <div class="flex justify-end gap-2 mt-3">
+                <button onclick="closeModal()" class="px-3 py-1 border rounded">Cancel</button>
+                <button onclick="submitForm()" class="px-3 py-1 bg-green-500 text-white rounded">Submit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="tabContent" class="bg-white rounded-lg shadow-sm p-6">
+            <!-- Students Tab -->
+            <div id="students-tab" class="tab-content">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Students Management</h2>
+                <div class="mb-4 flex gap-2">
+                    <input type="text" id="studentSearch" placeholder="Search students..." class="px-4 py-2 border border-gray-300 rounded-lg flex-1">
+                    <button onclick="openModal('students')" class="bg-blue-500 text-white px-4 py-2 rounded">
+                    Add Student
+                    </button>
+                </div>
+
+                <div id="studentsList" class="space-y-2">
+                    <p class="text-gray-500">Loading students...</p>
+                </div>
+            </div>
+
+            <!-- Courses Tab -->
+            <div id="courses-tab" class="tab-content hidden">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Courses Management</h2>
+                <div class="mb-4 flex gap-2">
+                    <input type="text" id="courseSearch" placeholder="Search courses..." class="px-4 py-2 border border-gray-300 rounded-lg flex-1">
+                    <button onclick="openModal('courses')"  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                        Add Course
+                    </button>
+                </div>
+                <div id="coursesList" class="space-y-2">
+                    <p class="text-gray-500">Loading courses...</p>
+                </div>
+            </div>
+
+            <!-- Departments Tab -->
+            <div id="departments-tab" class="tab-content hidden">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Departments Management</h2>
+                <div class="mb-4">
+                    <button onclick="openModal('departments')"  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                        Add Department
+                    </button>
+                </div>
+                <div id="departmentsList" class="space-y-2">
+                    <p class="text-gray-500">Loading departments...</p>
+                </div>
+            </div>
+
+            <!-- Instructors Tab -->
+            <div id="instructors-tab" class="tab-content hidden">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Instructors Management</h2>
+                <div class="mb-4 flex gap-2">
+                    <input type="text" id="instructorSearch" placeholder="Search instructors..." class="px-4 py-2 border border-gray-300 rounded-lg flex-1">
+                    <button onclick="openModal('instructors')"  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                        Add Instructor
+                    </button>
+                </div>
+                <div id="instructorsList" class="space-y-2">
+                    <p class="text-gray-500">Loading instructors...</p>
+                </div>
+            </div>
+
+            <!-- Enrollment Tab -->
+            <div id="enrollment-tab" class="tab-content hidden">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Enrollment Management</h2>
+                <div class="mb-4 flex gap-2">
+                    <input type="text" id="enrollmentSearch" placeholder="Search enrollments..." class="px-4 py-2 border border-gray-300 rounded-lg flex-1">
+                    <button onclick="openModal('enrollment')"  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                        Enroll Student
+                    </button>
+                </div>
+                <div id="enrollmentsList" class="space-y-2">
+                    <p class="text-gray-500">Loading enrollments...</p>
+                </div>
+            </div>
+
+            <!-- Grades Tab -->
+            <div id="grades-tab" class="tab-content hidden">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Grades Management</h2>
+                <div class="mb-4 flex gap-2">
+                    <input type="text" id="gradesSearch" placeholder="Search grades..." class="px-4 py-2 border border-gray-300 rounded-lg flex-1">
+                    <button onclick="openModal('grades')"  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                        Add Grade
+                    </button>
+                </div>
+                <div id="gradesList" class="space-y-2">
+                    <p class="text-gray-500">Loading grades...</p>
+                </div>
+            </div>
+
+            <!-- Attendance Tab -->
+            <div id="attendance-tab" class="tab-content hidden">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Attendance Management</h2>
+                <div class="mb-4 flex gap-2">
+                    <input type="text" id="attendanceSearch" placeholder="Search attendance..." class="px-4 py-2 border border-gray-300 rounded-lg flex-1">
+                    <button onclick="openModal('attendance')"  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                        Mark Attendance
+                    </button>
+                </div>
+                <div id="attendanceList" class="space-y-2">
+                    <p class="text-gray-500">Loading attendance...</p>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reports-tab" class="tab-content hidden">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Reports</h2>
+                <div class="space-y-4">
+                    <button id="studentReportBtn" class="block w-full text-left bg-gray-50 hover:bg-gray-100 p-4 rounded-lg border border-gray-200 transition">
+                        <h3 class="font-semibold text-gray-900">Student Full Reports</h3>
+                        <p class="text-sm text-gray-600">View complete student academic records</p>
+                    </button>
+                    <button id="departmentReportBtn" class="block w-full text-left bg-gray-50 hover:bg-gray-100 p-4 rounded-lg border border-gray-200 transition">
+                        <h3 class="font-semibold text-gray-900">Department Summaries</h3>
+                        <p class="text-sm text-gray-600">View department statistics and performance</p>
+                    </button>
+                    <button id="topStudentsBtn" class="block w-full text-left bg-gray-50 hover:bg-gray-100 p-4 rounded-lg border border-gray-200 transition">
+                        <h3 class="font-semibold text-gray-900">Top Students by Marks</h3>
+                        <p class="text-sm text-gray-600">View highest performing students</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const backendUrl = 'http://localhost:5000';
+        const token = sessionStorage.getItem('jwt_token');
+        const schemas = {
+            students: [
+                { name: "first_name", type: "text" },
+                { name: "last_name", type: "text" },
+                { name: "email", type: "email" },
+                { name: "phone", type: "text" },
+                { name: "date_of_birth", type: "date" },
+                { name: "gender", type: "text" },
+                { name: "address", type: "text" },
+                { name: "enrollment_year", type: "number" },
+                { name: "department_id", type: "number" }
+            ],
+
+            courses: [
+                { name: "course_name", type: "text" },
+                { name: "course_code", type: "text" },
+                { name: "credits", type: "number" },
+                { name: "department_id", type: "number" }
+            ],
+
+            departments: [
+                { name: "name", type: "text" },
+                { name: "head_of_department", type: "text" }
+            ],
+
+            instructors: [
+                { name: "first_name", type: "text" },
+                { name: "last_name", type: "text" },
+                { name: "email", type: "email" },
+                { name: "phone", type: "text" },
+                { name: "department_id", type: "number" }
+            ],
+
+            enrollments: [
+                { name: "student_id", type: "number" },
+                { name: "course_id", type: "number" },
+                { name: "semester", type: "text" },
+                { name: "year", type: "number" }
+            ],
+
+            grades: [
+                { name: "enrollment_id", type: "number" },
+                { name: "course_id", type: "number" },
+                { name: "marks", type: "number" },
+                { name: "grade", type: "text" }
+            ],
+
+            attendance: [
+                { name: "enrollment_id", type: "number" },
+                { name: "date", type: "date" },
+                { name: "status", type: "text" }
+            ]
+        };
+
+        // Check authentication
+        if (!token) {
+            window.location.href = '/login.html';
+        }
+
+        // Display username
+        document.getElementById('usernameDisplay').textContent = sessionStorage.getItem('username');
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.tab;
+                
+                // Update active tab button
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active', 'text-blue-600', 'border-blue-600');
+                    b.classList.add('text-gray-600', 'border-transparent');
+                });
+                btn.classList.add('active', 'text-blue-600', 'border-blue-600');
+                btn.classList.remove('text-gray-600', 'border-transparent');
+                
+                // Update visible tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(`${tabName}-tab`).classList.remove('hidden');
+                
+                // Load data for the tab
+                loadTabData(tabName);
+            });
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.clear();
+            window.location.href = '/login.html';
+        });
+
+        // Load data for tabs
+        async function loadTabData(tabName) {
+            const endpoints = {
+                students: '/students',
+                courses: '/courses',
+                departments: '/departments',
+                instructors: '/instructors',
+                enrollment: '/enrollments',
+                grades: '/grades',
+                attendance: '/attendance'
+            };
+
+            if (!endpoints[tabName]) return;
+
+            try {
+                const response = await fetch(`${backendUrl}${endpoints[tabName]}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+                displayTabData(tabName, data);
+            } catch (error) {
+                console.error('[v0] Error loading data:', error);
+                document.getElementById(`${tabName}List`).innerHTML = 
+                    '<p class="text-red-600">Failed to load data. Please check your backend connection.</p>';
+            }
+        }
+
+        // Display data in tabs
+        function displayTabData(tabName, data) {
+            const containerIds = {
+                students: 'studentsList',
+                courses: 'coursesList',
+                departments: 'departmentsList',
+                instructors: 'instructorsList',
+                enrollment: 'enrollmentsList',
+                grades: 'gradesList',
+                attendance: 'attendanceList'
+            };
+
+            const container = document.getElementById(containerIds[tabName]);
+            if (!container) return;
+
+            if (!data || (Array.isArray(data) && data.length === 0)) {
+                container.innerHTML = '<p class="text-gray-500">No records found.</p>';
+                return;
+            }
+
+            const items = Array.isArray(data) ? data : [data];
+            const columns = [...new Set(items.flatMap(obj => Object.keys(obj)))];
+
+            // 2. build table HTML
+            let tableHTML = `
+                <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-200 rounded-lg">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            ${columns.map(col => `<th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">${col}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${items.map(item => `
+                            <tr class="hover:bg-gray-50">
+                                ${columns.map(col => `
+                                    <td class="px-4 py-2 text-sm text-gray-700 border-b">
+                                        ${item[col] ?? ''}
+                                    </td>
+                                `).join('')}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                </div>
+            `;
+
+            container.innerHTML = tableHTML;
+
+        }
+
+        // Load initial data
+        loadTabData('students');
+        let currentTab = "students";
+
+        function openModal(tabName) {
+            currentTab = tabName;
+
+            const modal = document.getElementById("modal");
+            const form = document.getElementById("dynamicForm");
+            const title = document.getElementById("modalTitle");
+
+            title.textContent = `Add ${tabName}`;
+            form.innerHTML = "";
+
+            const fields = schemas[tabName];
+
+            fields.forEach(field => {
+                const input = document.createElement("input");
+                input.name = field.name;
+                input.type = field.type;
+                input.placeholder = field.name.replace(/_/g, " ");
+                input.className = "w-full border p-2";
+                input.required = true;
+
+                form.appendChild(input);
+            });
+
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        async function submitForm() {
+            const form = document.getElementById("dynamicForm");
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            // convert numbers automatically
+            schemas[currentTab].forEach(field => {
+                if (field.type === "number") {
+                data[field.name] = Number(data[field.name]);
+                }
+            });
+
+            try {
+                const res = await fetch(`http://localhost:5000/${currentTab}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(data)
+                });
+
+                if (!res.ok) throw new Error("Failed");
+
+                closeModal();
+                form.reset();
+
+                // refresh data
+                loadTabData(currentTab);
+
+            } catch (err) {
+                console.error(err);
+                alert("Error adding data");
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("modal").classList.add("hidden");
+            document.getElementById("modal").classList.remove("flex");
+        }
+    </script>
+</body>
+</html>

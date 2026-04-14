@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Check if user is logged in, redirect to dashboard or login
+        window.addEventListener('DOMContentLoaded', function() {
+            const token = sessionStorage.getItem('jwt_token');
+            const userRole = sessionStorage.getItem('user_role');
+            
+            if (token) {
+                if (userRole === 'admin') {
+                    window.location.href = '/dashboard.html';
+                } else {
+                    window.location.href = '/student-dashboard.html';
+                }
+            } else {
+                window.location.href = '/login.html';
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="flex items-center justify-center min-h-screen bg-gray-100">
+        <p class="text-gray-600">Loading...</p>
+    </div>
+</body>
+</html>

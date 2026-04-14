@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Student Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Student Management</h1>
+            <p class="text-gray-600 mb-8">Sign in to your account</p>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        required 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        placeholder="Enter your username"
+                    >
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                        placeholder="Enter your password"
+                    >
+                </div>
+                
+                <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg"></div>
+                
+                <button 
+                    type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition"
+                >
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const backendUrl = 'http://localhost:5000';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = "admin";
+            const errorDiv = document.getElementById('errorMessage');
+            
+            errorDiv.classList.add('hidden');
+            
+            try {
+                const response = await fetch(`${backendUrl}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password, role })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    errorDiv.textContent = data.message || 'Login failed. Please try again.';
+                    errorDiv.classList.remove('hidden');
+                    return;
+                }
+                
+                // Store JWT token and user info in session storage
+                sessionStorage.setItem('jwt_token', data.access_token);
+                sessionStorage.setItem('user_role', data.role);
+                //sessionStorage.setItem('username', data.username);
+                
+                // Redirect based on role
+                if (data.role === 'admin') {
+                    window.location.href = '/dashboard.html';
+                } else {
+                    window.location.href = '/student-dashboard.html';
+                }
+            } catch (error) {
+                console.log(error);
+                errorDiv.textContent = 'An error occurred. Please check your backend connection.';
+                errorDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
