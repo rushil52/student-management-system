@@ -9,29 +9,19 @@ A Flask REST API for managing students, courses, grades, attendance, and more.
 ### 1. Install dependencies
 ```bash
 pip install -r requirements.txt
+/frontend > npm install
 ```
 
 ### 2. Configure environment variables
 ```bash
-export MYSQL_HOST=localhost
-export MYSQL_USER=root
-export MYSQL_PASSWORD=yourpassword
-export MYSQL_DB=student_management
-export JWT_SECRET_KEY=change-this-in-production
+set MYSQL_HOST=localhost
+set MYSQL_USER=root
+set MYSQL_PASSWORD=yourpassword
+set MYSQL_DB=student_management
+set JWT_SECRET_KEY=keykeykekyekykeykekyekykeyk
 ```
 
-### 3. Run the DB migration
-Run your original schema SQL, then:
-```sql
--- migration_add_users.sql
-CREATE TABLE IF NOT EXISTS `users` (
-  `user_id`       INT PRIMARY KEY AUTO_INCREMENT,
-  `username`      VARCHAR(100) UNIQUE NOT NULL,
-  `password_hash` VARCHAR(255) NOT NULL,
-  `role`          VARCHAR(50) DEFAULT 'staff',
-  `created_at`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+### 3. Run the DB file, if not already
 
 ### 4. Start the server
 ```bash
@@ -59,17 +49,6 @@ Authorization: Bearer <your_token>
 | POST   | /auth/register   | Register a new user      |
 | POST   | /auth/login      | Login and get JWT token  |
 
-**Register body:**
-```json
-{ "username": "admin", "password": "secret", "role": "admin" }
-```
-
-**Login body:**
-```json
-{ "username": "admin", "password": "secret" }
-```
-
----
 
 ### Students
 | Method | Endpoint                          | Description                      |
@@ -83,22 +62,6 @@ Authorization: Bearer <your_token>
 | GET    | /students/<id>/grades             | Student's grades                 |
 | GET    | /students/<id>/attendance         | Student's attendance summary     |
 
-**Add/Update Student body:**
-```json
-{
-  "first_name": "Rahul",
-  "last_name": "Sharma",
-  "email": "rahul@example.com",
-  "phone": "9876543210",
-  "date_of_birth": "2002-05-15",
-  "gender": "Male",
-  "address": "123 Main St, Delhi",
-  "enrollment_year": 2023,
-  "department_id": 1
-}
-```
-
----
 
 ### Courses
 | Method | Endpoint               | Description                            |
@@ -110,7 +73,6 @@ Authorization: Bearer <your_token>
 | DELETE | /courses/<id>          | Delete course                          |
 | GET    | /courses/<id>/stats    | Average marks, pass rate, enrollment count |
 
----
 
 ### Departments
 | Method | Endpoint                      | Description                      |
@@ -122,7 +84,6 @@ Authorization: Bearer <your_token>
 | GET    | /departments/<id>/students    | Students in a department         |
 | GET    | /departments/<id>/courses     | Courses in a department          |
 
----
 
 ### Instructors
 | Method | Endpoint                                  | Description                        |
@@ -134,7 +95,6 @@ Authorization: Bearer <your_token>
 | DELETE | /instructors/<id>                         | Delete instructor                  |
 | POST   | /instructors/<id>/assign-course           | Assign instructor to a course      |
 
----
 
 ### Enrollment
 | Method | Endpoint                  | Description                                         |
@@ -143,26 +103,12 @@ Authorization: Bearer <your_token>
 | POST   | /enrollment               | Enroll a student in a course                        |
 | DELETE | /enrollment/<id>          | Drop an enrollment                                  |
 
-**Enroll body:**
-```json
-{ "student_id": 1, "course_id": 2, "semester": "Fall", "year": 2024 }
-```
-
----
-
 ### Grades
 | Method | Endpoint        | Description                                        |
 |--------|-----------------|----------------------------------------------------|
 | GET    | /grades          | List grades (?course_id, ?semester, ?year)         |
 | POST   | /grades          | Add/update a grade (upsert)                        |
 | PUT    | /grades/<id>     | Update specific grade record                       |
-
-**Grade body:**
-```json
-{ "enrollment_id": 5, "course_id": 2, "marks": 87.5, "grade": "A" }
-```
-
----
 
 ### Attendance
 | Method | Endpoint              | Description                                       |
@@ -171,17 +117,6 @@ Authorization: Bearer <your_token>
 | POST   | /attendance           | Mark attendance (single or bulk)                  |
 | PUT    | /attendance/<id>      | Update attendance status                          |
 
-**Bulk attendance body:**
-```json
-{
-  "records": [
-    { "enrollment_id": 1, "date": "2024-11-01", "status": "present" },
-    { "enrollment_id": 2, "date": "2024-11-01", "status": "absent" }
-  ]
-}
-```
-
----
 
 ### Reports & Analytics
 | Method | Endpoint                          | Description                                     |
