@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `instructors` (
 CREATE TABLE IF NOT EXISTS `course_instructors` (
   `course_id` int,
   `instructor_id` int,
-  `primary` key(course_id,instructor_id)
+  PRIMARY KEY (course_id,instructor_id)
 );
 
 CREATE TABLE IF NOT EXISTS `enrollment` (
